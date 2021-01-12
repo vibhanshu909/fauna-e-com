@@ -1,6 +1,7 @@
 import { NextApiHandler } from 'next'
+import { countData } from './count-background'
 
 const handler: NextApiHandler = (req, res) => {
-  res.end('test api response')
+  res.end(`counting ${countData}`)
 }
 export default handler
