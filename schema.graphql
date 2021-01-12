@@ -1,0 +1,125 @@
+enum Gender {
+  FEMALE
+  MALE
+  RATHER_NOT_SAY
+}
+
+type User {
+  addresses: [Address!]
+  createdAt: Time!
+  email: String
+  firstname: String
+  gender: Gender
+  lastname: String
+  phone: String!
+  isSeller: Boolean @resolver(name: "user_is_seller")
+}
+
+enum AddressType {
+  HOME
+  WORK
+}
+
+type Address @embedded {
+  createdAt: Time!
+  address: String!
+  addressType: AddressType!
+  alternatePhone: String
+  city: String!
+  landmark: String
+  locality: String!
+  name: String!
+  phone: String!
+  pincode: String!
+  state: String!
+}
+
+type Category {
+  createdAt: Time!
+  name: String!
+  products: [Product!] @relation
+  parent: Category
+}
+
+enum PaymentMode {
+  COD
+  ONLINE
+}
+
+enum PaymentStatus {
+  NOT_APPLICABLE
+  PENDING
+  SUCCESSFUL
+}
+
+type Order {
+  address: String!
+  createdAt: Time!
+  orderDetails: [OrderDetail!]! @relation
+
+  paymentId: String
+  paymentMode: PaymentMode!
+  paymentStatus: PaymentStatus!
+}
+
+type OrderDetail {
+  createdAt: Time!
+
+  order: Order! @relation
+  price: Int!
+  product: Product! @relation
+  quantity: Int!
+  statuses: [OrderStatus!]!
+}
+
+enum OrderDetailStatus {
+  CANCELLED
+  DELIVERED
+  ORDERED
+  PACKED
+  PENDING
+  REFUND
+  RETURNED
+  SHIPPED
+}
+
+type OrderStatus @embedded {
+  createdAt: Time!
+  refundId: String
+  status: OrderDetailStatus!
+  description: String
+}
+
+type Product {
+  avgRating: Int
+  category: Category @relation
+  createdAt: Time!
+  description: String!
+  discount: Float!
+  maxQuantityPerCustomer: Int!
+  maxQuantityPerOrder: Int!
+  minQuantityPerCustomer: Int!
+  minQuantityPerOrder: Int!
+  MRP: Float!
+  name: String!
+  price: Float!
+  quantity: Int!
+  ratingCount: Int
+  reviewCount: Int
+}
+
+enum ProductsOfCustomerType {
+  CART
+  SAVE_FOR_LATER
+}
+
+type ProductsOfCustomer @embedded {
+  createdAt: Time!
+  product: Product! @relation
+  quantity: Int!
+  type: ProductsOfCustomerType!
+}
+
+type Query {
+  allTodos: [User!]
+}

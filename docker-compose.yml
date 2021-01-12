@@ -1,0 +1,19 @@
+version: "3"
+services:
+  faunadb:
+    image: fauna/faunadb:latest
+    restart: unless-stopped
+    ports:
+      - 8443:8443
+      - 8084:8084
+    volumes:
+      - fauna-lib-datavolume:/var/lib/fauna
+      - fauna-log-datavolume:/var/log/fauna
+  dashboard:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "5000:3000"
+volumes:
+  fauna-lib-datavolume:
+  fauna-log-datavolume:
